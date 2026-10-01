@@ -35,6 +35,11 @@ export async function saveVisitor(visitorId: string | null, _prev: ActionResult<
 
   const { data, error } = await g.supabase.from("visitors").insert({ ...v, church_id: g.churchId }).select("id").single();
   if (error || !data) return fail(error, "register the visitor");
+  // Registering at a service counts as attending it.
+  if (v.service_id && g.ctx.can("attendance.record")) {
+    await g.supabase.from("attendance").insert({ church_id: g.churchId, service_id: v.service_id, visitor_id: data.id, status: "present" });
+    revalidatePath(`/attendance/${v.service_id}`);
+  }
   revalidatePath("/visitors");
   return { ok: true, data: { id: data.id }, message: `${v.first_name} has been registered. Welcome!` };
 }
