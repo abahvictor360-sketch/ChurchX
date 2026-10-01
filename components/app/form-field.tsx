@@ -66,8 +66,10 @@ export function SubmitButton({
   size,
   variant,
   disabled,
+  onClick,
 }: {
   children: React.ReactNode;
+  onClick?: () => void;
   pendingText?: string;
   className?: string;
   size?: React.ComponentProps<typeof Button>["size"];
@@ -76,7 +78,7 @@ export function SubmitButton({
 }) {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" disabled={pending || disabled} aria-disabled={pending || disabled} className={className} size={size} variant={variant}>
+    <Button type="submit" onClick={onClick} disabled={pending || disabled} aria-disabled={pending || disabled} className={className} size={size} variant={variant}>
       {pending && <Loader2 className="animate-spin" aria-hidden />}
       {pending ? pendingText : children}
     </Button>

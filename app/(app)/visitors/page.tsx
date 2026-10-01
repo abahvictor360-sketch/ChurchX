@@ -48,7 +48,7 @@ export default async function VisitorsPage({ searchParams }: PageProps<"/visitor
           <>
             {ctx.can("data.export") && (
               <Button asChild variant="outline" size="sm">
-                <a href="/api/export/visitors">
+                <a download href="/api/export/visitors">
                   <Download /> Export CSV
                 </a>
               </Button>

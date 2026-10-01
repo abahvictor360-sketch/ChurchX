@@ -39,7 +39,7 @@ export default async function MembersPage({ searchParams }: PageProps<"/members"
           <>
             {ctx.can("data.export") && (
               <Button asChild variant="outline" size="sm">
-                <a href={`/api/export/members${exportQs ? `?${exportQs}` : ""}`}>
+                <a download href={`/api/export/members${exportQs ? `?${exportQs}` : ""}`}>
                   <Download /> Export CSV
                 </a>
               </Button>
