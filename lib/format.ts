@@ -59,7 +59,8 @@ export function percentChange(current: number, previous: number) {
 
 export function initials(name: string | null | undefined) {
   if (!name) return "?";
-  const parts = name.trim().split(/\s+/);
+  const parts = name.replace(/[^\p{L}\s]/gu, " ").trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return "?";
   return ((parts[0]?.[0] ?? "") + (parts.length > 1 ? parts[parts.length - 1][0] : "")).toUpperCase();
 }
 

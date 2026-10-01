@@ -152,7 +152,7 @@ export default async function DashboardPage() {
         )}
       </section>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-3">
+      <div className="mt-4 grid gap-4 lg:grid-cols-3 lg:items-start">
         <div className="lg:col-span-2">
           {attendance ? (
             <ChartCard

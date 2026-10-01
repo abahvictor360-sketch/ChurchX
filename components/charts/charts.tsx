@@ -58,7 +58,7 @@ export function TrendArea({
           </defs>
           <CartesianGrid vertical={false} stroke="var(--color-border)" strokeDasharray="3 3" />
           <XAxis dataKey="label" {...axis} minTickGap={16} />
-          <YAxis {...axis} width={48} allowDecimals={false} tickFormatter={(v: number) => fmt(v, format, true)} />
+          <YAxis {...axis} width={format?.kind === "money" ? 72 : 48} allowDecimals={false} tickFormatter={(v: number) => fmt(v, format, true)} />
           <Tooltip content={(p) => <ChartTooltip {...p} format={format} />} cursor={{ stroke: "var(--color-muted-foreground)", strokeDasharray: "3 3" }} />
           <Area
             type="monotone"
@@ -94,7 +94,7 @@ export function GroupedBars({
         <BarChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }} barGap={2} barCategoryGap="28%">
           <CartesianGrid vertical={false} stroke="var(--color-border)" strokeDasharray="3 3" />
           <XAxis dataKey="label" {...axis} minTickGap={8} />
-          <YAxis {...axis} width={48} allowDecimals={false} tickFormatter={(v: number) => fmt(v, format, true)} />
+          <YAxis {...axis} width={format?.kind === "money" ? 72 : 48} allowDecimals={false} tickFormatter={(v: number) => fmt(v, format, true)} />
           <Tooltip content={(p) => <ChartTooltip {...p} format={format} />} cursor={{ fill: "var(--color-muted)" }} />
           {series.length > 1 && (
             <Legend

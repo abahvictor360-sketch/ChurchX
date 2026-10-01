@@ -10,7 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Field, FormError, SubmitButton } from "@/components/app/form-field";
 import { nativeSelect } from "@/features/members/member-form";
 import { completeFollowup } from "@/features/followups/actions";
-import { useActionToast } from "@/hooks/use-action";
+import { toast } from "sonner";
+import type { ActionResult } from "@/lib/actions";
 import { CONTACT_METHODS, OUTCOMES } from "@/lib/validation";
 import { titleCase } from "@/lib/format";
 
@@ -18,9 +19,17 @@ const METHOD_LABEL: Record<string, string> = { phone: "Phone call", whatsapp: "W
 
 export function RecordFollowupDialog({ followupId, personName, isVisitor, today }: { followupId: string; personName: string; isVisitor: boolean; today: string }) {
   const [open, setOpen] = React.useState(false);
-  const [state, action] = useActionState(completeFollowup, null);
+  // Toast inside the action: on success this card disappears from the list
+  // (refresh), so an effect-based toast would never run.
+  const [state, action] = useActionState(async (prev: ActionResult | null, fd: FormData) => {
+    const res = await completeFollowup(prev, fd);
+    if (res.ok) {
+      toast.success(res.message ?? "Follow-up recorded");
+      setOpen(false);
+    } else if (!res.fieldErrors) toast.error(res.error);
+    return res;
+  }, null);
   const fe = (k: string) => (state && !state.ok ? state.fieldErrors?.[k] : undefined);
-  useActionToast(state, () => setOpen(false));
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>

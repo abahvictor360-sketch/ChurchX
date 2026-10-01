@@ -1,0 +1,30 @@
+# Supabase CLI configuration for local development (`supabase start`).
+project_id = "churchx"
+
+[api]
+schemas = ["public"]
+extra_search_path = ["public", "extensions"]
+
+[auth]
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["http://localhost:3000/**"]
+enable_signup = true
+
+[auth.email]
+enable_confirmations = true
+
+[auth.email.template.confirmation]
+subject = "Confirm your ChurchX account"
+content_path = "./supabase/templates/confirmation.html"
+
+[auth.email.template.recovery]
+subject = "Reset your ChurchX password"
+content_path = "./supabase/templates/recovery.html"
+
+[auth.email.template.invite]
+subject = "You've been invited to ChurchX"
+content_path = "./supabase/templates/invite.html"
+
+[auth.email.template.magic_link]
+subject = "Your ChurchX sign-in link"
+content_path = "./supabase/templates/magic_link.html"
