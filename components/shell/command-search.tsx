@@ -52,22 +52,17 @@ export function SearchTrigger({ onOpen, className }: { onOpen: () => void; class
 export function CommandSearch({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
   const router = useRouter();
   const [query, setQuery] = React.useState("");
-  const [results, setResults] = React.useState<SearchResult[]>([]);
-  const [loading, setLoading] = React.useState(false);
+  const [found, setFound] = React.useState<{ query: string; results: SearchResult[] }>({ query: "", results: [] });
+  const searchable = query.trim().length >= 2;
+  const loading = searchable && found.query !== query;
+  const results = searchable ? found.results : [];
 
   React.useEffect(() => {
-    if (query.trim().length < 2) {
-      setResults([]);
-      return;
-    }
+    if (query.trim().length < 2) return;
     let active = true;
-    setLoading(true);
     const t = setTimeout(async () => {
       const r = await globalSearch(query);
-      if (active) {
-        setResults(r);
-        setLoading(false);
-      }
+      if (active) setFound({ query, results: r });
     }, 220);
     return () => {
       active = false;

@@ -15,8 +15,12 @@ export function NotificationsBell({ initialUnread }: { initialUnread: number }) 
   const [open, setOpen] = React.useState(false);
   const [items, setItems] = React.useState<NotificationItem[] | null>(null);
   const [unread, setUnread] = React.useState(initialUnread);
-
-  React.useEffect(() => setUnread(initialUnread), [initialUnread]);
+  const [prevInitial, setPrevInitial] = React.useState(initialUnread);
+  if (prevInitial !== initialUnread) {
+    // Server sent a fresh count (navigation/refresh): adopt it.
+    setPrevInitial(initialUnread);
+    setUnread(initialUnread);
+  }
 
   React.useEffect(() => {
     if (!open) return;

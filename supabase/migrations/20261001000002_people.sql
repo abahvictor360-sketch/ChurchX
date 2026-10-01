@@ -36,11 +36,11 @@ create table public.members (
   updated_at timestamptz not null default now(),
   full_name text generated always as (
     first_name || coalesce(' ' || middle_name, '') || ' ' || last_name
-  ) stored,
+  ) stored not null,
   search_text text generated always as (
     lower(first_name || ' ' || coalesce(middle_name || ' ', '') || last_name || ' ' ||
           coalesce(phone, '') || ' ' || coalesce(email, '') || ' ' || coalesce(membership_number, ''))
-  ) stored,
+  ) stored not null,
   unique (church_id, id),
   unique (church_id, membership_number)
 );
@@ -101,7 +101,7 @@ create table public.member_notes (
   member_id uuid not null,
   visibility text not null default 'general' check (visibility in ('general', 'confidential')),
   body text not null check (char_length(trim(body)) between 1 and 4000),
-  created_by uuid references auth.users (id) on delete set null,
+  created_by uuid references public.profiles (id) on delete set null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   foreign key (church_id, member_id) references public.members (church_id, id) on delete cascade
@@ -138,10 +138,10 @@ create table public.visitors (
   created_by uuid references auth.users (id) on delete set null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
-  full_name text generated always as (first_name || coalesce(' ' || last_name, '')) stored,
+  full_name text generated always as (first_name || coalesce(' ' || last_name, '')) stored not null,
   search_text text generated always as (
     lower(first_name || ' ' || coalesce(last_name, '') || ' ' || coalesce(phone, '') || ' ' || coalesce(email, ''))
-  ) stored,
+  ) stored not null,
   unique (church_id, id),
   foreign key (church_id, converted_member_id) references public.members (church_id, id) on delete set null (converted_member_id),
   check ((status = 'converted') = (converted_member_id is not null))
@@ -232,6 +232,7 @@ create table public.followups (
   foreign key (church_id, visitor_id) references public.visitors (church_id, id) on delete cascade,
   -- the assignee must be a user of THIS church
   foreign key (church_id, assigned_to) references public.church_users (church_id, user_id),
+  constraint followups_assignee_profile_fk foreign key (assigned_to) references public.profiles (id),
   check (member_id is not null or visitor_id is not null),
   check (status <> 'completed' or (contact_method is not null and completed_at is not null))
 );

@@ -32,21 +32,25 @@ export function OnboardingWizard() {
   const churchId = state?.ok ? state.data?.id : undefined;
   const fe = (k: string) => (state && !state.ok ? state.fieldErrors?.[k] : undefined);
 
-  React.useEffect(() => {
-    const d = COUNTRIES.find((c) => c.name === country);
+  const chooseCountry = (name: string) => {
+    setCountry(name);
+    const d = COUNTRIES.find((c) => c.name === name);
     if (d) {
       setTimezone(d.timezone);
       setCurrency(d.currency);
     }
-  }, [country]);
+  };
 
-  React.useEffect(() => {
+  // Jump to the logo step on success, or back to the step that has errors.
+  const [prevState, setPrevState] = React.useState(state);
+  if (prevState !== state) {
+    setPrevState(state);
     if (churchId) setStep(2);
     else if (state && !state.ok && state.fieldErrors) {
       const step0 = ["name", "country", "state", "city", "address"];
       setStep(Object.keys(state.fieldErrors).some((k) => step0.includes(k)) ? 0 : 1);
     }
-  }, [churchId, state]);
+  }
 
   const finish = async () => {
     const res = await completeOnboarding();
@@ -95,7 +99,7 @@ export function OnboardingWizard() {
               </Field>
               <div className="grid gap-4 sm:grid-cols-2">
                 <Field label="Country" htmlFor="country" error={fe("country")}>
-                  <select name="country" className={selectClass} value={country} onChange={(e) => setCountry(e.target.value)}>
+                  <select name="country" className={selectClass} value={country} onChange={(e) => chooseCountry(e.target.value)}>
                     {COUNTRIES.map((c) => (
                       <option key={c.name}>{c.name}</option>
                     ))}

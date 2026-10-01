@@ -40,7 +40,7 @@ create table public.contributions (
   voided_by uuid references auth.users (id) on delete set null,
   source text not null default 'manual' check (source in ('manual', 'import', 'paystack', 'flutterwave', 'stripe')),
   external_id text,
-  recorded_by uuid references auth.users (id) on delete set null,
+  recorded_by uuid references public.profiles (id) on delete set null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   foreign key (church_id, member_id) references public.members (church_id, id) on delete set null (member_id),
@@ -133,6 +133,7 @@ create table public.member_care_alerts (
   foreign key (church_id, visitor_id) references public.visitors (church_id, id) on delete cascade,
   foreign key (church_id, followup_id) references public.followups (church_id, id) on delete cascade,
   foreign key (church_id, assigned_to) references public.church_users (church_id, user_id),
+  constraint care_alerts_assignee_profile_fk foreign key (assigned_to) references public.profiles (id),
   check (num_nonnulls(member_id, visitor_id) = 1)
 );
 create unique index member_care_alerts_dedupe_uq on public.member_care_alerts
@@ -173,7 +174,7 @@ alter table public.followups
 create table public.audit_logs (
   id uuid primary key default gen_random_uuid(),
   church_id uuid references public.churches (id) on delete cascade,
-  actor_id uuid references auth.users (id) on delete set null,
+  actor_id uuid references public.profiles (id) on delete set null,
   action text not null,
   entity_type text not null,
   entity_id uuid,

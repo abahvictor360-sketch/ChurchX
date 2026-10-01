@@ -117,6 +117,13 @@ export type Database = {
         };
         Relationships: [
           {
+            foreignKeyName: "audit_logs_actor_id_fkey";
+            columns: ["actor_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
             foreignKeyName: "audit_logs_church_id_fkey";
             columns: ["church_id"];
             isOneToOne: false;
@@ -230,6 +237,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "roles";
             referencedColumns: ["key"];
+          },
+          {
+            foreignKeyName: "church_users_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -388,6 +402,13 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "members";
             referencedColumns: ["church_id","id"];
+          },
+          {
+            foreignKeyName: "contributions_recorded_by_fkey";
+            columns: ["recorded_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -712,6 +733,13 @@ export type Database = {
         };
         Relationships: [
           {
+            foreignKeyName: "followups_assignee_profile_fk";
+            columns: ["assigned_to"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
             foreignKeyName: "followups_care_alert_fk";
             columns: ["care_alert_id"];
             isOneToOne: false;
@@ -850,6 +878,13 @@ export type Database = {
         };
         Relationships: [
           {
+            foreignKeyName: "care_alerts_assignee_profile_fk";
+            columns: ["assigned_to"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
             foreignKeyName: "member_care_alerts_church_id_assigned_to_fkey";
             columns: ["church_id","assigned_to"];
             isOneToOne: false;
@@ -932,6 +967,13 @@ export type Database = {
             referencedRelation: "members";
             referencedColumns: ["church_id","id"];
           },
+          {
+            foreignKeyName: "member_notes_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
         ];
       };
       members: {
@@ -962,8 +1004,8 @@ export type Database = {
           created_by: string | null;
           created_at: string;
           updated_at: string;
-          full_name: string | null;
-          search_text: string | null;
+          full_name: string;
+          search_text: string;
         };
         Insert: {
           id?: string;
@@ -1327,8 +1369,8 @@ export type Database = {
           created_by: string | null;
           created_at: string;
           updated_at: string;
-          full_name: string | null;
-          search_text: string | null;
+          full_name: string;
+          search_text: string;
         };
         Insert: {
           id?: string;

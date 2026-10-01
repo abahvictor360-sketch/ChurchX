@@ -121,7 +121,7 @@ create table public.role_permissions (
 create table public.church_users (
   id uuid primary key default gen_random_uuid(),
   church_id uuid not null references public.churches (id) on delete cascade,
-  user_id uuid not null references auth.users (id) on delete cascade,
+  user_id uuid not null references public.profiles (id) on delete cascade,
   role text not null references public.roles (key),
   status text not null default 'active' check (status in ('invited', 'active', 'disabled')),
   member_id uuid, -- optional link to the person's member record (FK added later)
