@@ -1,26 +1,132 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
+@custom-variant dark (&:is(.dark *));
+
+/* ChurchX design tokens — warm orange primary with deep teal accents,
+   light neutral canvas and white cards (SmartHR-inspired). */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --radius: 0.625rem;
+  --background: #f5f6f8;
+  --foreground: #1f2430;
+  --card: #ffffff;
+  --card-foreground: #1f2430;
+  --popover: #ffffff;
+  --popover-foreground: #1f2430;
+  --primary: #f26b1d;
+  --primary-foreground: #ffffff;
+  --secondary: #0f4c5c;
+  --secondary-foreground: #ffffff;
+  --muted: #f1f2f5;
+  --muted-foreground: #6b7280;
+  --accent: #fff1e8;
+  --accent-foreground: #c2500f;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --success: #16a34a;
+  --success-foreground: #ffffff;
+  --warning: #eab308;
+  --warning-foreground: #1f2430;
+  --border: #e7e9ee;
+  --input: #dfe2e8;
+  --ring: #f26b1d;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #374151;
+  --sidebar-muted: #9ca3af;
+  /* Validated categorical pair (CVD-safe, >=3:1 on card): orange, teal */
+  --chart-1: #e85f12;
+  --chart-2: #0a8aa3;
+  --chart-3: #f59e0b;
+  --chart-4: #22c55e;
+  --chart-5: #94a3b8;
+}
+
+.dark {
+  --background: #0f1218;
+  --foreground: #e6e8ec;
+  --card: #171b23;
+  --card-foreground: #e6e8ec;
+  --popover: #171b23;
+  --popover-foreground: #e6e8ec;
+  --primary: #f47a33;
+  --primary-foreground: #ffffff;
+  --secondary: #2b8a9e;
+  --secondary-foreground: #ffffff;
+  --muted: #1f2430;
+  --muted-foreground: #9aa3b2;
+  --accent: #2a1d14;
+  --accent-foreground: #ffb084;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --success: #22c55e;
+  --success-foreground: #0f1218;
+  --warning: #facc15;
+  --warning-foreground: #0f1218;
+  --border: #2a303c;
+  --input: #323948;
+  --ring: #f47a33;
+  --sidebar: #141820;
+  --sidebar-foreground: #cbd2dc;
+  --sidebar-muted: #6b7280;
+  --chart-1: #e0661f;
+  --chart-2: #16a2be;
+  --chart-3: #fbbf24;
+  --chart-4: #4ade80;
+  --chart-5: #64748b;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-muted: var(--sidebar-muted);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv11";
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
 }
